@@ -135,3 +135,5 @@ dist
 
  config/*
  **/config/*
+
+ .env
