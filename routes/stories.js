@@ -4,6 +4,7 @@ const {ensureAuth } = require('../middleware/auth');
 
 const Story = require('../models/Story')
 
+
 //@desc Show add page
 //@route  GET /stories/add
 router.get('/add', ensureAuth, (req, res) => {
@@ -31,6 +32,7 @@ router.get('/', ensureAuth, async (req, res) => {
     .populate('user')
     .sort( { createdAt: 'desc'} )
     .lean();
+    console.log(stories);
     res.render('stories/index', {
       stories,
     })
@@ -39,5 +41,37 @@ router.get('/', ensureAuth, async (req, res) => {
     res.render('error/500');
   }
 });
+
+
+//@desc Delete story
+//@route  DELETE /stories/:id
+router.post('/:id', ensureAuth, async (req, res) => {
+  console.log("trying remove")
+  try {
+    await Story.remove({ _id: req.params.id })
+    res.redirect('/dashboard');
+  } catch(err) {
+    console.log(err);
+    return res.render('error/500');
+  }
+});
+
+//@desc Shows a story
+//@route  GET /stories/:id
+router.get('/:id', ensureAuth, async (req, res) => {
+  try {
+    const story = await Story.find( {_id:  req.params.id}).lean();
+    res.render('stories/story', {
+      story,
+    })
+    console.log(story)
+  } catch(err) {
+    console.log(err);
+    res.render('error/500');
+  }
+});
+
+
+
 
 module.exports = router;
