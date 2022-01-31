@@ -27,7 +27,16 @@ if (process.env.NODE_ENV === 'development') {
     app.use(morgan('dev'));
 }
 
-app.engine('hbs', exphbs.engine({defaultLayout: 'main', extname: '.hbs'}));
+// Handlebars helpers
+const { formatDate, stripTags, truncate, editIcon} = require('./helpers/hbs');
+
+
+// Handlebars
+app.engine('hbs', exphbs.engine({
+    helpers: {formatDate, stripTags, truncate, editIcon},
+    defaultLayout: 'main',
+    extname: '.hbs'
+}));
 app.set('view engine', 'hbs');
 
 var store = new MongoDBStore({
@@ -47,7 +56,15 @@ app.use(session( {
 app.use(passport.initialize())
 app.use(passport.session())
 
+
+// Static folder
 app.use(express.static(path.join(__dirname, 'public')));
+
+// Set global var
+app.use(function(req, res, next) {
+    res.locals.user = req.user || null;
+    next();
+})
 
 // Routes
 app.use('/', require('./routes/index'));
@@ -57,3 +74,4 @@ app.use('/stories', require('./routes/stories'));
 const PORT = process.env.PORT || 5000;
 
 app.listen(PORT, console.log(`Server running in ${process.env.NODE_ENV} mode on port ${PORT}`));
+
