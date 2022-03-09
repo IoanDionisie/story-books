@@ -32,7 +32,6 @@ router.get('/', ensureAuth, async (req, res) => {
     .populate('user')
     .sort( { createdAt: 'desc'} )
     .lean();
-    console.log(stories);
     res.render('stories/index', {
       stories,
     })

@@ -7,6 +7,9 @@ const morgan = require('morgan');
 var MongoDBStore = require('connect-mongodb-session')(session);
 const mongoose = require('mongoose');
 
+const paginate = require('express-paginate');
+
+
 //const { engine } = require('express-handlebars');
 const exphbs = require('express-handlebars');
 
@@ -18,6 +21,9 @@ require('./config/passport')(passport)
 connectDB();
 
 const app = express();
+
+// keep this before all routes that will use pagination
+app.use(paginate.middleware(5, 50));
 
 // Body Parser
 app.use(express.urlencoded({extended: false}));
@@ -37,6 +43,9 @@ app.engine('hbs', exphbs.engine({
     defaultLayout: 'main',
     extname: '.hbs'
 }));
+
+
+
 app.set('view engine', 'hbs');
 
 var store = new MongoDBStore({
