@@ -26,14 +26,31 @@ router.get('/dashboard', ensureAuth, async (req, res) => {
           ]);
 
         const pageCount = Math.ceil(itemCount / req.query.limit);
+        let pages = paginate.getArrayPages(req)(100, pageCount, req.query.page);
 
-        const stories = await Story.find({user: req.user.id}).lean()
+        let hidePreviousButton = true, hideNextButton = true;
+
+        if (req.query.page == pageCount) {
+            hideNextButton = false;
+        } else if (req.query.page == 1) {
+            hidePreviousButton = false;
+        } 
+        
+        let prevPage = req.query.page - 1;
+        let nextPage = req.query.page + 1;
+
+        const stories = await Story.find({user: req.user.id}).skip(req.skip).lean();
+
         res.render('dashboard', {
             name: req.user.firstName,
             results,
             pageCount,
             itemCount,
-            pages: paginate.getArrayPages(req)(3, pageCount, req.query.page)
+            hidePreviousButton, 
+            hideNextButton,
+            prevPage, 
+            nextPage,
+            pages: paginate.getArrayPages(req)(100, pageCount, req.query.page)
         });
     } catch(err) {
         console.log(err);
