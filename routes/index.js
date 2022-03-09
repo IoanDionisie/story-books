@@ -26,9 +26,10 @@ router.get('/dashboard', ensureAuth, async (req, res) => {
           ]);
 
         const pageCount = Math.ceil(itemCount / req.query.limit);
+        let hidePreviousButton = true, hideNextButton = true;
         let pages = paginate.getArrayPages(req)(100, pageCount, req.query.page);
 
-        let hidePreviousButton = true, hideNextButton = true;
+        pages[req.query.page-1].isSelected = true; 
 
         if (req.query.page == pageCount) {
             hideNextButton = false;
@@ -39,7 +40,6 @@ router.get('/dashboard', ensureAuth, async (req, res) => {
         let prevPage = req.query.page - 1;
         let nextPage = req.query.page + 1;
 
-        const stories = await Story.find({user: req.user.id}).skip(req.skip).lean();
 
         res.render('dashboard', {
             name: req.user.firstName,
@@ -50,7 +50,7 @@ router.get('/dashboard', ensureAuth, async (req, res) => {
             hideNextButton,
             prevPage, 
             nextPage,
-            pages: paginate.getArrayPages(req)(100, pageCount, req.query.page)
+            pages: pages
         });
     } catch(err) {
         console.log(err);

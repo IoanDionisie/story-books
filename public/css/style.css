@@ -17,7 +17,30 @@ p {
     margin-right: 10px;
 }
 
-.flex {
+.pagination {
     width: 100%;
     display: flex;
+    justify-content: center;
+    align-items: center;
+    height: auto;
+}
+
+.page-item a:hover {
+    text-decoration: none;
+    background: #F44336 !important;
+    color: white;
+}
+
+.page-item .is-selected {
+    background: #F44336 !important;
+    border: 1px solid #F44336 !important;
+    color: white;
+}
+
+.custom-pagination-nav {
+    background: #424242 !important;
+}
+
+.btn .fa-trash {
+    color: white;
 }

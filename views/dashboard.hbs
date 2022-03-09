@@ -1,50 +1,81 @@
-<h1> Dashboard </h1>
-<h3> Welcome {{name}} </h3>
-<p> Here are your stories</p>
 
-{{#if results}}
-    <table class="striped">
-        <thead>
-            <tr>
-                <th> Title</th>
-                <th> Date</th>
-                <th> Status</th>
-            </tr>
-        </thead>
+<div class="container">
 
-        <tbody>
-            {{#each results}}
-                <tr>
-                    <td><a href="stories/{{_id}}"></a> {{title}}</td>
-                     <td>{{formatDate createdAt 'MMMM Do YYYY, h:mm:ss a'}}</td>
-                    <td><span class="dash-status"> {{status}}</span></td>
-                    <td>
-                        <form action="/stories/{{_id}}" method="POST" id="delete-form">
-                            <input type="hidden" name="_method" value="DELETE">
-                            <button type="submit" class="btn red">
-                                <i class="fas fa-trash"></i>
-                            </button>
-                        </form>
-                    </td>
-                </tr>
-            {{/each}}
-        </tbody>
-    </table>
-    {{pages.currentPage}}
-    <nav aria-label="Page navigation">
-        <ul class="pagination flex">
-            {{#if hidePreviousButton}}
-                <li class="page-item"><a class="page-link" href="/dashboard?page={{prevPage}}&limit=5">Previous</a></li>
-            {{/if}}
-            {{#each pages}}
-                <li class="page-item"><a class="page-link" href="/dashboard?page={{this.number}}&limit=5">{{this.number}}</a></li
-            {{/each}}
-            {{#if hideNextButton}}
-                <li class="page-item"><a class="page-link"  href="/dashboard?page={{nextPage}}&limit=5">Next</a></li>
-            {{/if}}
-        </ul>
-    </nav>
+    <div class="row">
+        <div class="col-12">
+            <h1> Dashboard </h1>
+        </div>
+    </div>
+    
+    <div class="row">
+        <div class="col-12">
+            <h3> Welcome {{name}} </h3>
+            <p> Here are your stories</p>
+        </div>
+        
+    </div>
 
-{{else}}
-    <p> You have not created any stories. </p>
-{{/if}}
+    {{#if results}}
+
+        <div class="row">
+            <div class="col-12">
+                <table class="striped">
+                    <thead>
+                        <tr>
+                            <th> Title</th>
+                            <th> Date</th>
+                            <th> Status</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        {{#each results}}
+                            <tr>
+                                <td><a href="stories/{{_id}}"></a> {{title}}</td>
+                                <td>{{formatDate createdAt 'MMMM Do YYYY, h:mm:ss a'}}</td>
+                                <td><span class="dash-status"> {{status}}</span></td>
+                                <td>
+                                    <form action="/stories/{{_id}}" method="POST" id="delete-form">
+                                        <input type="hidden" name="_method" value="DELETE">
+                                        <button type="submit" class="btn red">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
+                                    </form>
+                                </td>
+                            </tr>
+                        {{/each}}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12">
+                <nav class="custom-pagination-nav" aria-label="Page navigation">
+                    <ul class="pagination flex">
+                        {{#if hidePreviousButton}}
+                            <li class="page-item"><a class="page-link" href="/dashboard?page={{prevPage}}&limit=5">Previous</a></li>
+                        {{/if}}
+                        {{#each pages}}
+                            {{#if this.isSelected}}
+                                <li class="page-item"><a class="page-link is-selected" href="/dashboard?page={{this.number}}&limit=5">{{this.number}}</a></li>
+                            {{else}}
+                                <li class="page-item"><a class="page-link" href="/dashboard?page={{this.number}}&limit=5">{{this.number}}</a></li>
+                            {{/if}}
+                        {{/each}}
+                        {{#if hideNextButton}}
+                            <li class="page-item"><a class="page-link" href="/dashboard?page={{nextPage}}&limit=5">Next</a></li>
+                        {{/if}}
+                    </ul>
+                </nav>
+            </div>
+        </div>
+
+    {{else}}
+        <div class="row">
+            <div class="col-12">
+                <p> You have not created any stories. </p>
+            </div>
+        </div>
+    {{/if}}
+
+</div>
